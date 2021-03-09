@@ -12,14 +12,33 @@ body {
     font-family: 'Caveat', cursive;
 }
 
+.sideBar{
+    position: absolute;
+    left: 1%;
+    bottom: 40%;
+    font-size: 35px;
+    background-color: rgb(215, 215, 245);
+}
 
+.search-input {
+    align-self: center;
+    margin-left: 1rem;
+}
 
 .btn {
-    border: none;
-    border-radius: 8px;
+    border: 1px solid rgb(102, 102, 240);
+    border-radius: .25rem;
     background-color: #aca7f8;
+    margin: 1rem;
+    height: 3.5rem;
+    width: 4.5rem;
 }
 
 .fas {
     font-size: 26px;
+}
+
+.fas:hover {
+    font-size: 32px;
+    transition: all .3s ease-in-out;
 }
