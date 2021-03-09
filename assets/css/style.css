@@ -7,17 +7,20 @@ body {
     background-image: linear-gradient(to bottom, rgba(253, 250, 0, 0.8) 0%,rgba(99, 75, 150, 0.7) 100%), url("/assets/images/gulf_sunset.jpg");
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; /*cover*/
     position: relative;
     font-family: 'Caveat', cursive;
+    border-radius: 0%;
 }
 
 .sideBar{
     position: absolute;
-    left: 1%;
-    bottom: 40%;
+    left: 0%;
+    top: 15.25rem;
+    bottom: 0%;
     font-size: 35px;
-    background-color: rgb(215, 215, 245);
+    background-color: rgb(168, 168, 248);
+    margin: 0%;
 }
 
 .search-input {
@@ -26,9 +29,9 @@ body {
 }
 
 .btn {
-    border: 1px solid rgb(102, 102, 240);
+    border: 1px solid rgb(129, 129, 247);
     border-radius: .25rem;
-    background-color: #aca7f8;
+    background-color: #c7c3f8;
     margin: 1rem;
     height: 3.5rem;
     width: 4.5rem;
@@ -41,4 +44,13 @@ body {
 .fas:hover {
     font-size: 32px;
     transition: all .3s ease-in-out;
+}
+
+.card-container {
+    left: 40%;
+    margin-left: 25%;
+}
+
+.five-day-cards {
+    margin-top: 3rem;
 }
