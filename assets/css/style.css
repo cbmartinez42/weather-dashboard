@@ -1,0 +1,24 @@
+
+body {
+    background-color: rgb(188, 187, 245);
+}
+.jumbotron {
+    background-image: linear-gradient(to bottom, rgba(235, 179, 96, 0.6) 0%,rgba(152, 150, 235, 0.9) 100%), url("/assets/images/gulf-sunset.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    font-family: 'Caveat', cursive;
+}
+
+
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    background-color: #aca7f8;
+}
+
+.fas {
+    font-size: 26px;
+}
