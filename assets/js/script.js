@@ -44,7 +44,6 @@ let searchBtn = document.getElementById('search-btn');
 
 let searchHandler = function (event){
     event.preventDefault();
-    console.log('button clicked!');
     let city = searchInputEl.value.trim();
 
     if (city) {
@@ -67,7 +66,7 @@ let getCurrentWeather = function (city) {
             console.log(response);
             response.json().then(function (data) {
                 console.log(data);
-                console.log(response.data.main.temp)
+                console.log(data.main.temp)
                 displayWeather(data, city);
             });
             } else {
@@ -88,8 +87,23 @@ let getFiveDay = function (city) {
         if (response.ok) {
             console.log(response);
             response.json().then(function (data) {
-            console.log(data);
-            displayFiveDay(data, city);
+                const today = new Date()
+                const tomorrow = new Date(today)
+                tomorrow.setDate(tomorrow.getDate() + 1)
+            // console.log(data);
+            const temp = []
+            for (const node of data.list){
+                const date = node.dt_txt.substring(0,10)
+                const formattedDate = tomorrow.toISOString().substring(0,10)
+                // console.log(date);
+                // console.log(formattedDate);
+                if (date == formattedDate) {
+                    temp.push(node)
+                }  
+            }
+            // console.log(temp)
+            const value = temp.pop();   // need to hardcode for the 5th 
+            displayFiveDay(value);
             });
         } else {
             alert('Error: ' + response.statusText);
@@ -100,28 +114,37 @@ let getFiveDay = function (city) {
         });
 };
 
-let displayWeather = function () {
+let displayWeather = function (data) {
+    const temporaryDiv = $('#temporaryid');
     console.log('displayWeather activated');
-    let currentWeatherContainer = $('<div>')
-        .addClass('container card-container');
-    let currWeatherRow = $('<div>')
-        .addClass('row');
-    currentWeatherContainer.append(currWeatherRow);
-    let currWeatherCol = $('<div>')
-        .addClass('col-10');
-    currWeatherRow.append(currWeatherCol);
-    let currWeatherCard = $('<div>')
-        .addClass('card');
-    currWeatherCol.append(currWeatherCard);
+    const currentWeatherContainer = $('#currWeatherContainer');
+    const city = data.name
+
+
     let currentWeatherBody = $('<div>')
         .addClass('card-body')
-        .attr('style', 'background-image: url(http://placekitten.com/290/250)');
+        .attr('style', 'background-image: url(http://placekitten.com/290/250)')
+        .html(`<h5 class="card-title">${city}</h5>`)
+        .html(`<h4 class="card-subtitletitle">${city}</h5>`);   
+    let currWeatherCard = $('<div>')
+        .addClass('card');
+    let currWeatherCol = $('<div>')
+        .addClass('col-10');
+    let currWeatherRow = $('<div>')
+        .addClass('row');
     currWeatherCard.append(currentWeatherBody);
+    currWeatherCol.append(currWeatherCard);
+    currWeatherRow.append(currWeatherCol);
+    currentWeatherContainer.append(currWeatherRow);
+
+
 
 }
 
-let displayFiveDay = function() {
-    console.log('displayFiveDay activated')
+let displayFiveDay = function(value) {
+    console.log(value)
+
+
 }
 
   $('#search-btn').click(searchHandler);
