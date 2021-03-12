@@ -1,46 +1,9 @@
-
 function init() {
-
-// function createHistory() {
-//     let histContainer = $('<div>')
-//         .addClass('container history');
-//     let histRow = $('<div>')
-//         .addClass('row');
-//     histContainer.append(histRow);
-//     let histSidebar = $('<div>')
-//         .addClass('sideBar');
-//     histRow.append(histSidebar);
-//     let histInput = $('<div>')
-//         .addClass('input-group mb3 input-group-prepend');
-//     histSidebar.append(histInput);
-//     let searchInput = $('<input>')
-//         $(searchInput).attr({
-//             'type': 'text',
-//             'id': 'search-input',
-//             'placeholder': 'Phoenix',
-//             'class': 'form-control search-input',
-//             'aria-label': 'Default',
-//             'aria-describedby': 'inputGroup-sizing-default'
-//         })
-//     histInput.append(searchInput);
-//     let searchBtn = $('<button>')
-//         .html('<i class="fas fa-search-location"></i>')
-//         $(searchBtn).attr({
-//             'class': 'btn btn-outline-secondary',
-//             'type': 'button',
-//             'id': 'search-btn'
-//         })
-//     $('.jumbotron').append(histContainer)
-// }
-
-
-
-// createHistory();
 
 let searchInputEl = document.getElementById('search-input');
 let searchBtn = document.getElementById('search-btn');
-
-
+let today = moment().format('dddd, MMM Do, YYYY');
+console.log(today);
 
 let searchHandler = function (event){
     event.preventDefault();
@@ -49,13 +12,10 @@ let searchHandler = function (event){
     if (city) {
         getCurrentWeather(city);
         getFiveDay(city);
-        searchInputEl.textContent = '';
-        // nameInputEl.value = '';
       } else {
         alert('Please enter a city');
       }
 }
-
 
 let getCurrentWeather = function (city) {
     let apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=3cbac659165d03c7a5a56ef38b21d47f';
@@ -66,8 +26,8 @@ let getCurrentWeather = function (city) {
             console.log(response);
             response.json().then(function (data) {
                 console.log(data);
-                console.log(data.main.temp)
-                displayWeather(data, city);
+                displayWeather(data); // data, city
+                // console.log(response.data.weather[0].icon);
             });
             } else {
             alert('Error: ' + response.statusText);
@@ -90,7 +50,7 @@ let getFiveDay = function (city) {
                 const today = new Date()
                 const tomorrow = new Date(today)
                 tomorrow.setDate(tomorrow.getDate() + 1)
-            // console.log(data);
+            console.log(data);
             const temp = []
             for (const node of data.list){
                 const date = node.dt_txt.substring(0,10)
@@ -101,8 +61,8 @@ let getFiveDay = function (city) {
                     temp.push(node)
                 }  
             }
-            // console.log(temp)
-            const value = temp.pop();   // need to hardcode for the 5th 
+            console.log(temp)
+            const value = temp.pop();   // need to hardcode for the 6th index
             displayFiveDay(value);
             });
         } else {
@@ -114,18 +74,23 @@ let getFiveDay = function (city) {
         });
 };
 
+// humidity wind speed uv index
 let displayWeather = function (data) {
-    const temporaryDiv = $('#temporaryid');
-    console.log('displayWeather activated');
     const currentWeatherContainer = $('#currWeatherContainer');
-    const city = data.name
-
+    const cityNm = data.name;
+    const temp = data.main.temp + '°';
+    const icon = data.weather[0].icon;
+    const humidity = data.main.humidity + '%';
+    const windSpeed = data.wind.speed;
 
     let currentWeatherBody = $('<div>')
         .addClass('card-body')
-        .attr('style', 'background-image: url(http://placekitten.com/290/250)')
-        .html(`<h5 class="card-title">${city}</h5>`)
-        .html(`<h4 class="card-subtitletitle">${city}</h5>`);   
+        .html(`<h4 class="card-title">${cityNm}</h4><h5>${today}</h5> 
+        <h4><img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="Weather Image"></h4>
+        <h5 class="card-subtitle mb-2">Temperature: ${temp}</h5>
+        <p id='currHumidity'>Humidity: ${humidity}</p>
+        <p id='wind'>Wind Speed: ${windSpeed}MPH</p>
+        <p id='uvIndex'>UV Index: ${humidity}</p>`);   // <---- need to figure this out
     let currWeatherCard = $('<div>')
         .addClass('card');
     let currWeatherCol = $('<div>')
@@ -136,15 +101,26 @@ let displayWeather = function (data) {
     currWeatherCol.append(currWeatherCard);
     currWeatherRow.append(currWeatherCol);
     currentWeatherContainer.append(currWeatherRow);
-
-
-
 }
 
 let displayFiveDay = function(value) {
-    console.log(value)
+    console.log(value);
+    const fiveDayContainer = $('.five-day-cards');
+    const temp = data.main.temp + '°';
+    const humidity = data.main.humidity + '%';
 
-
+    let fiveDayBody = $('<div>')
+        .addClass('card-body')
+        .html(`<h5 class="card-title">Temperature: ${temp} <img src="http://placekitten.com/30/30" alt="Weather Image"></h5>
+        <h6 class="card-subtitle">${temp}</h6>
+        <p>Humidity: ${humidity}</p>`)
+    let fiveDayCard = $('<div>')
+        .addClass('card');
+    let fiveDayCol = $('div')
+        addClass('col-2');
+    fiveDayCard.append(fiveDayBody);
+    fiveDayCol.append(fiveDayCard);
+    fiveDayContainer.append(fiveDayCol);
 }
 
   $('#search-btn').click(searchHandler);

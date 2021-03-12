@@ -55,6 +55,6 @@ button {
     margin-top: 3rem;
 }
 
-/* .row {
-    flex-wrap: wrap;
-} */
+.card-body {
+    background-color: tan
+}
