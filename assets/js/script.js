@@ -1,28 +1,18 @@
+let searchInputEl = document.getElementById('search-input');
+let today = moment().format('dddd, MMM Do, YYYY');
+
 let searchHandler = function (event){
     event.preventDefault();
+    $('.removeMe').remove();
     let city = searchInputEl.value.trim();
     if (city) {
-        
         getLatLon(city);
-        // getFiveDay(city);
       } else {
         alert('Please enter a city');
       }
 }
 
-// function init() {
-
-let searchInputEl = document.getElementById('search-input');
-let searchBtn = document.getElementById('search-btn');
-let today = moment().format('dddd, MMM Do, YYYY');
-console.log(today);
-// let cityValue = searchInputEl.value.trim();
-// console.log(cityValue);
-
-
-
 let getLatLon = function (city) {
-    
     let apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=3cbac659165d03c7a5a56ef38b21d47f';
   
     fetch(apiUrl)
@@ -30,9 +20,6 @@ let getLatLon = function (city) {
             if (response.ok) {
             console.log(response);
             response.json().then(function (data) {
-
-                console.log(data);
-                // const city = data.name;
                 createCurrWeatherDiv(data);
                 handleOneCall(data); // data, city
             });
@@ -49,7 +36,6 @@ function createCurrWeatherDiv(data) {
     const currentWeatherContainer = $('#currWeatherContainer');
     const city = data.name;
     let currentWeatherBody = $('<div>')
-        // .attr('id)
         .addClass('card-body current-weather-body')
         .html(`<h4 class="card-title">${city}</h4>`);
     let currWeatherCard = $('<div>')
@@ -57,7 +43,7 @@ function createCurrWeatherDiv(data) {
     let currWeatherCol = $('<div>')
         .addClass('col-10');
     let currWeatherRow = $('<div>')
-        .addClass('row');
+        .addClass('row removeMe');
     currWeatherCard.append(currentWeatherBody);
     currWeatherCol.append(currWeatherCard);
     currWeatherRow.append(currWeatherCol);
@@ -65,7 +51,6 @@ function createCurrWeatherDiv(data) {
 }
 
 function handleOneCall(data){
-    const cityNm = data.name;
     const lat = data.coord.lat;
     const lon = data.coord.lon;
     console.log(lat);
@@ -76,10 +61,7 @@ function handleOneCall(data){
             if (response.ok) {
             console.log(response);
             response.json().then(function (data) {
-                const city = cityNm
-
-                console.log(data);
-                displayWeather(data); // data, city
+                displayWeather(data); 
                 displayFiveDay(data);
             });
             } else {
@@ -91,7 +73,6 @@ function handleOneCall(data){
         });
    };
    
-
 // humidity wind speed uv index
 let displayWeather = function (data) {
     const temp = data.current.temp + '°';
@@ -113,7 +94,6 @@ function displayFiveDay (data) {
     const fiveDayRow = $('.five-day-cards');
   
     for (let i = 1; i < 6; i++) {
- 
     let unixDate = data.daily[i].dt
     let date = moment.unix(unixDate).format('M/D/YY');
     let temp = data.daily[i].temp.max + '°';
@@ -130,15 +110,12 @@ function displayFiveDay (data) {
     let fiveDayCard = $('<div>')
         .addClass('card');
     let fiveDayCol = $('<div>')
-        .addClass('col-2');
+        .addClass('col-2 removeMe');
     fiveDayCard.append(fiveDayBody);
     fiveDayCol.append(fiveDayCard);
     fiveDayRow.append(fiveDayCol)
     console.log('line 137')
     }
-    // rowContainer.append(fiveDayCol)
 }
 
 $('#search-btn').click(searchHandler);
-// }
-// init()

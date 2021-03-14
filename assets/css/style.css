@@ -46,15 +46,17 @@ button {
 }
 
 .card-container {
-    left: 40%;
+    /* left: 80%; */
     margin-left: 25%;
-
+    /* justify-content: center; */
 }
 
 .five-day-cards {
     margin-top: 3rem;
+    justify-content: center;
 }
 
 .card-body {
     background-color: tan
+    
 }
