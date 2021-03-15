@@ -3,9 +3,6 @@ let today = moment().format('dddd, MMM Do, YYYY');
 let histUl = document.getElementById('hist-items');
 let histDiv = document.getElementById('hist-div')
 let cities = document.getElementsByClassName('cityList');
-// console.log('cities: ' + cities);
-// cities.addEventListener('click', 
-
 
 let searchHandler = function (event){
     event.preventDefault();
@@ -56,46 +53,29 @@ function createCurrWeatherDiv(data) {
     currentWeatherContainer.append(currWeatherRow);
 }
 
+//  build the search history from localstorage
 function buildSearchHistory(){
     $('.removeMeHist').remove();
     let savedCities = [];
     savedCities = JSON.parse(localStorage.getItem('searchCities')) || [];
     for (let i = 0; i < savedCities.length; i++) {
-        let histCity = savedCities[i].city; //tried JSON.stringify already, still returns as object in html
-        console.log(histCity)
-        // let histButton = $('<button>')
-        // .attr('id', 'btn' + i)
-        // .addClass('cityList')
-        // .text(savedCities[i].city);
+        let histCity = savedCities[i].city; 
     let histButton = document.createElement('button');
-    histButton.setAttribute('class', 'cityList removeMeHist');
+    histButton.setAttribute('class', 'cityList btn btn-secondary btn-sm removeMeHist');
     histButton.setAttribute('id', histCity)
     histButton.textContent = histCity;    
-
-    //     let histLi = $('<li>')
-    //     .addClass('removeMeHist');
-    // histLi.append(histButton);   
-    // histUl.append(histLi);
     histDiv.append(histButton)
     }
-
 }
 
+// save items to localstorage
 function saveLocalStorage (city) {
-    // let savedCities = [];
-    // savedCities = JSON.parse(localStorage.getItem('searchCities')) || [];
-    // savedCities.unshift({cityNm: city});
-
     let savedCities = localStorage.getItem('searchCities');
     let citiesArray = [];
     if (!!savedCities) {
         citiesArray = JSON.parse(savedCities);
     }
     citiesArray.unshift({city: city});
-
-
-
-    // console.log(savedCities)
     localStorage.setItem('searchCities', JSON.stringify(citiesArray));
     buildSearchHistory();
 }
@@ -133,8 +113,8 @@ let displayWeather = function (data) {
     <h5 class="card-subtitle mb-2">Temperature: ${temp}</h5>
     <p id='currHumidity'>Humidity: ${humidity}</p>
     <p id='wind'>Wind Speed: ${windSpeed}MPH</p>
-    <p id='uv-index'>UV Index: ${uvIndex}</p>`).appendTo('.current-weather-body')
-    const uvIndexEl = document.getElementById('uv-index')
+    <p class='justify-content-center' id='uv-index'>UV Index: ${uvIndex}</p>`).appendTo('.current-weather-body')
+    // const uvIndexEl = document.getElementById('uv-index')
     if (uvIndex < 3) {
         $('#uv-index').addClass('bg-success')
     } else if (uvIndex > 5) {
@@ -175,13 +155,21 @@ function init(){
     buildSearchHistory();
 }
 
-$('.cityList').click(function(event){
-    console.log(event);
-    var city=event.target.innerHTML
-    console.log('the city is ' + city)
-})
+function usePastCity(event) {
+    let pastCity = event.target;
+    if (event.target.matches(".cityList")) {
+        city = pastCity.textContent.trim();
+        getLatLon(city);
+    }
+}
 
+function clearHistory() {
+    localStorage.clear();
+    window.location.reload();
+}
 
-// $('.cityList').click(searchHandler) 
+// event listeners for searches
+$('#clear-history').click(clearHistory);
+$(document).on("click", usePastCity);
 $('#search-btn').click(searchHandler);
 init ();
