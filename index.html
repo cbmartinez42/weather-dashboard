@@ -20,16 +20,16 @@
     <!-- left sidebar -->
     <div class="container history">
         <div class="row">
-            <div class="sideBar text-center">
+            <div class="sideBar text-center col-lg-2 col-md-3 col-sm-4">
                 <h6 class="text-muted">Search by city name (no state or zip code)</h6>
-                <div class="input-group mb-1 input-group-prepend">
+                <div class="input-group mb-1">
                     <input type="text" id="search-input" placeholder="Phoenix" class="form-control search-input" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                    <button class="btn btn-outline-secondary" value='submit' type="submit" id="search-btn"><i class="fas fa-search-location"></i></button>
+                    <button class="btn input-group-append btn-outline-secondary " value='submit' type="submit" id="search-btn"><i class="fas fa-search-location"></i></button>
                 </div>
                 <div>
-                    <button class="btn btn-danger" id="clear-history" title="Clear Search History"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn my-3 btn-danger" id="clear-history" title="Clear Search History"><i class="fas fa-trash-alt"></i></button>
                 </div>
-                <div id='hist-div'>
+                <div class="btn-group-vertical" id='hist-div'>
                 </div>
             </div>
         </div>

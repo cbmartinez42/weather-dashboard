@@ -4,9 +4,11 @@ let histUl = document.getElementById('hist-items');
 let histDiv = document.getElementById('hist-div')
 let cities = document.getElementsByClassName('cityList');
 
+// gets inpute value, resets form, then passes value to function to get lat/lon
 let searchHandler = function (event){
-    event.preventDefault();
     let city = searchInputEl.value.trim();
+    // reset input value to blank
+    searchInputEl.value = '';
     if (city) {
         getLatLon(city);
       } else {
@@ -14,7 +16,9 @@ let searchHandler = function (event){
       }
 }
 
+// gets lat&lon from api call to be used in calling onecall API
 let getLatLon = function (city) {
+    event.preventDefault(); // this gives an error when included in searchHandler, and even though event is crossed out it only works if it's included
     let apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=3cbac659165d03c7a5a56ef38b21d47f';
     $('.removeMe').remove();
     fetch(apiUrl)
@@ -33,6 +37,7 @@ let getLatLon = function (city) {
         });
    };
 
+// create framework for display elements and save city name to localstorage for the search history
 function createCurrWeatherDiv(data) {
     const currentWeatherContainer = $('#currWeatherContainer');
     const city = data.name;
@@ -57,7 +62,7 @@ function buildSearchHistory(){
     $('.removeMeHist').remove();
     let savedCities = [];
     savedCities = JSON.parse(localStorage.getItem('searchCities')) || [];
-    // limit saved cities to 8
+ // limit saved cities to 8
     savedCities.splice(8);
     for (let i = 0; i < savedCities.length; i++) {
         let histCity = savedCities[i].city; 
@@ -73,15 +78,17 @@ function buildSearchHistory(){
 function saveLocalStorage (city) {
     let savedCities = localStorage.getItem('searchCities');
     let citiesArray = [];
+    
     if (!!savedCities) {
         citiesArray = JSON.parse(savedCities);
     }
-    citiesArray.splice(7)
-    citiesArray.unshift({city: city});
+    citiesArray.splice(8)
+    citiesArray.unshift({'city': city});
     localStorage.setItem('searchCities', JSON.stringify(citiesArray));
     buildSearchHistory();
 }
 
+// fetch onecall API to get data needed for both current weather and five-day cards
 function handleOneCall(data){
     const lat = data.coord.lat;
     const lon = data.coord.lon;
@@ -102,7 +109,7 @@ function handleOneCall(data){
         });
    };
    
-// humidity wind speed uv index
+// insert current weather data into framework created earlier
 let displayWeather = function (data) {
     const temp = data.current.temp + '°';
     const icon = data.current.weather[0].icon;
@@ -126,10 +133,9 @@ let displayWeather = function (data) {
     }
 }
 
-// need date, icon, temp, humidity
+// create build five day forecast and insert data 
 function displayFiveDay (data) {
-    const fiveDayRow = $('.five-day-cards');
-  
+    const fiveDayRow = $('.five-day-cards'); 
     for (let i = 1; i < 6; i++) {
     let unixDate = data.daily[i].dt
     let date = moment.unix(unixDate).format('M/D/YY');
@@ -146,17 +152,19 @@ function displayFiveDay (data) {
     let fiveDayCard = $('<div>')
         .addClass('card mb-5 five-card');
     let fiveDayCol = $('<div>')
-        .addClass('col-2 removeMe');
+        .addClass('col-2 col-md-2 removeMe');
     fiveDayCard.append(fiveDayBody);
     fiveDayCol.append(fiveDayCard);
     fiveDayRow.append(fiveDayCol)
     }
 }
 
+// init function to build search history on page load
 function init(){
     buildSearchHistory();
 }
 
+// function to search from past city again
 function usePastCity(event) {
     let pastCity = event.target;
     if (event.target.matches(".cityList")) {
@@ -165,13 +173,19 @@ function usePastCity(event) {
     }
 }
 
+// clear button function
 function clearHistory() {
     localStorage.clear();
     window.location.reload();
 }
 
-// event listeners for searches
+// event listeners for searches, click and on enter
 $('#clear-history').click(clearHistory);
 $(document).on("click", usePastCity);
+$('#search-input').on('keypress', function(e){
+    if(e.which == 13) {
+        searchHandler();
+    }
+});
 $('#search-btn').click(searchHandler);
 init ();
