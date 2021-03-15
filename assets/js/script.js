@@ -6,7 +6,6 @@ let cities = document.getElementsByClassName('cityList');
 
 let searchHandler = function (event){
     event.preventDefault();
-    $('.removeMe').remove();
     let city = searchInputEl.value.trim();
     if (city) {
         getLatLon(city);
@@ -17,7 +16,7 @@ let searchHandler = function (event){
 
 let getLatLon = function (city) {
     let apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=3cbac659165d03c7a5a56ef38b21d47f';
-  
+    $('.removeMe').remove();
     fetch(apiUrl)
         .then(function (response) {
             if (response.ok) {
@@ -42,7 +41,7 @@ function createCurrWeatherDiv(data) {
         .addClass('card-body current-weather-body')
         .html(`<h4 class="card-title">${city}</h4>`);
     let currWeatherCard = $('<div>')
-        .addClass('card shadow-sm p-3 mb-2 bg-secondary rounded');
+        .addClass('card curr-card mb-2');
     let currWeatherCol = $('<div>')
         .addClass('col-10');
     let currWeatherRow = $('<div>')
@@ -142,7 +141,7 @@ function displayFiveDay (data) {
         <h6 class="card-subtitle">${temp}</h6>
         <p>Humidity: ${humidity}</p>`);
     let fiveDayCard = $('<div>')
-        .addClass('card shadow-sm p-1 mb-5 bg-secondary rounded');
+        .addClass('card mb-5 five-card');
     let fiveDayCol = $('<div>')
         .addClass('col-2 removeMe');
     fiveDayCard.append(fiveDayBody);

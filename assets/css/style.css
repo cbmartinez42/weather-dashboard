@@ -55,7 +55,12 @@ h6 {
 .card-container {
     /* left: 80%; */
     margin-left: 25%;
+    margin-right: 30%;
     /* justify-content: center; */
+}
+
+.curr-card {
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
 }
 
 .five-day-cards {
@@ -63,6 +68,9 @@ h6 {
     justify-content: center;
 }
 
+.five-card {
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+}
 .card-body {
     background-color: tan
     
