@@ -57,6 +57,8 @@ function buildSearchHistory(){
     $('.removeMeHist').remove();
     let savedCities = [];
     savedCities = JSON.parse(localStorage.getItem('searchCities')) || [];
+    // limit saved cities to 8
+    savedCities.splice(8);
     for (let i = 0; i < savedCities.length; i++) {
         let histCity = savedCities[i].city; 
     let histButton = document.createElement('button');
@@ -74,6 +76,7 @@ function saveLocalStorage (city) {
     if (!!savedCities) {
         citiesArray = JSON.parse(savedCities);
     }
+    citiesArray.splice(7)
     citiesArray.unshift({city: city});
     localStorage.setItem('searchCities', JSON.stringify(citiesArray));
     buildSearchHistory();
